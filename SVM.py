@@ -22,6 +22,7 @@ predicted_species = le.inverse_transform(prediction)
 y_pred_test = model.predict(X_test)
 print("Prediction: ", predicted_species)
 print("SVM Accuracy score:", SVM_score.mean())# mean Score else score is a list
+#print("SVM Accuracy:", accuracy_score(y_test, y_pred)) can do it like this as well
 print("Confusion Matrix",confusion_matrix(y_test, y_pred_test))
 # ROC curve (for 2 classes )
 #fpr, tpr, _ = roc_curve(y_test, model.predict_proba(X_test)[:,1])
