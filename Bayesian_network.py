@@ -1,9 +1,9 @@
-from pgmpy.models import BayesianNetwork
+from pgmpy.models import DiscreteBayesianNetwork
 from pgmpy.factors.discrete import TabularCPD
 from pgmpy.inference import VariableElimination
 
 # Define the network structure
-model = BayesianNetwork([
+model = DiscreteBayesianNetwork([
     ('Intelligence', 'Grade'),
     ('StudyHours', 'Grade'),
     ('Difficulty', 'Grade')
@@ -63,5 +63,4 @@ result4 = infer.query(['Difficulty'], evidence={
     'StudyHours': 'Insufficient'
 })
 print(result4)
-
 
