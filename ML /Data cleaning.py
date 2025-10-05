@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
+from sklearn.impute import SimpeImputer
+from spicy.stats import zscore
 
 df = pd.DataFrame({
     'ID': [1, 2, 3, 4, 5, 6],
@@ -18,65 +20,85 @@ df = pd.DataFrame({
     'Joining_Date': ['2020-01-01', '2019-05-10', 'not available', '2020-01-01', '2021-03-15', '2019-05-10']
 })
 
+#handling missing vals
+
 print(df.isnull().sum())
+
+df=df.dropna()#row
+df=df.dropna(axis=1)#col
 
 df['Salary'] = df['Salary'].fillna(df['Salary'].mean())
 df['Department'] = df['Department'].fillna(df['Department'].mode()[0])
-df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
+df['Age'] = df['Age'].ffill(inplace=True)
+df['Age'] = df['Age'].bfill(inplace=True)
 df['Age'] = df['Age'].fillna(df['Age'].median())
 
-print("Before:", df.shape)
+imp_mean=SimpeImputer(strategy="mean")
+df[["Age","Score"]]=imp_mean.fit_transform(df[["Age","Score"]])
 
+#handling dup vals
+
+print("Before:", df.shape)
+dup=df.duplicated()
 df = df.drop_duplicates()
 print("After removing duplicates:", df.shape)
+df=df.drop_duplicates(subset=["Age","Score"]) #drop dups based on these cols only
+
+#Feature Encoding
 
 le = LabelEncoder()
-df['Dept_Label'] = le.fit_transform(df['Department'])
+df['Dept_Label'] = le.fit_transform(df['Department'])#like low<med<high
 
 #one hot shot
-df = pd.get_dummies(df, columns=['Department'], drop_first=True)
+df = pd.get_dummies(df, columns=['Department'], drop_first=True) #no order category Like cities
 print(df.head())
-# Replace categorical values with numeric ranks
+
+#Ordinal encoding
+quality_mapping={"hello":1,"HI":2,"Hey":3}
 df['Quality_Encoded'] = df['Quality'].map(quality_mapping)
 
 print("\nAfter Ordinal Encoding:")
 print(df)
 
-#Scaling
-scaler_minmax = MinMaxScaler()
+#Feature Scaling
+
+scaler_minmax = MinMaxScaler()# ragne (0,1), Non -ve
 encoded_df['Salary_MinMax'] = scaler_minmax.fit_transform(encoded_df[['Salary']])
-scaler_std = StandardScaler()
+
+scaler_std = StandardScaler()#transform data to have mean=0 and std dev=1
 encoded_df['Age_Standard'] = scaler_std.fit_transform(encoded_df[['Age']])
 
-X = encoded_df[['Age', 'Salary_MinMax', 'Age_Standard']]
-y = np.random.choice([0, 1], size=len(encoded_df))  # dummy target
-
 #feature selection
+
 best_features = SelectKBest(score_func=chi2, k=2)
 fit = best_features.fit(X.abs(), y)
 print("Scores:", fit.scores_)
 
 #imbalanced data
-# Example dataset (90% class 0, 10% class 1)
-X = pd.DataFrame({
-    'Feature1': np.random.randn(100),
-    'Feature2': np.random.randn(100)
-})
 
-y = np.array([0]*90 + [1]*10)  # 90 zeros and 10 ones
-
-print("Before balancing:", Counter(y))
-# Create object
 ros = RandomOverSampler(random_state=42)
-
-# Fit and resample
 X_over, y_over = ros.fit_resample(X, y)
 
-print("After RandomOverSampler:", Counter(y_over))
-# Create object
 rus = RandomUnderSampler(random_state=42)
-
-# Fit and resample
 X_under, y_under = rus.fit_resample(X, y)
 
-print("After RandomUnderSampler:", Counter(y_under))
+#Outliers detection
+df["col4"]=zscore(df["c4"])
+outliers=df[df["col4"].abs()>3]
+print(outliers)
+
+#else use boxplot, scatterplot, historgram
+
+#outlier handling
+
+#drop outliers
+df=df[(df["c1"]>=lower_bound) & (df["c1"]>=upper_bound)] 
+
+#clip data extremes
+lower=df["c1"].quantile(0.05)
+upper=df["c1"].quantile(0.95)
+df["c2"]=df["c1"].clop(lower,upper) 
+
+#Log transform
+df["log_c1"]=np.log(df["c1"])
+
