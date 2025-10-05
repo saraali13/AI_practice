@@ -36,3 +36,17 @@ dept_info = pd.DataFrame({
 
 merged_df = pd.merge(combined_concat, dept_info, on='Department', how='left')
 print("Merge:\n", merged_df.head())
+
+df.tail()
+df.columns#col names
+df.count()#non null vals for each cols
+df.drop("C1",axis=1)#remove col
+df.insert(0,"c2",COL2)#adding a col
+r4={"c1":2,"c2":4}
+df.append(r4,ignore_index=True)
+df.reset_index(drop=False,inplace=True)
+df.set_index("c1") #index=c1
+df.sort_values("c2")# data is sorted acc to c2
+df["c2"][`df["c2"]==0]="male"# change values in a col male whereever it is 0
+df["c1"] # or df.pop("c1")
+df[["c1","c2"]]
