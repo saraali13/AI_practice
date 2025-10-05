@@ -49,3 +49,18 @@ print("Voting Classifier Accuracy:", svoting.score(X_test, y_test))
 bagging_model=BaggingClassifier(DecisionTreeClassifier(random_state=42))
 bagging_model.fit(X_train, y_train)
 bagging_model.score(X_test, y_test)
+
+models = {
+    'KNN': knn.score(X_test, y_test),
+    'Decision Tree (Entropy)': dt_entropy.score(X_test, y_test),
+    'Random Forest': rf.score(X_test, y_test),
+    'AdaBoost': ada.score(X_test, y_test),
+    'Voting': voting.score(X_test, y_test)
+}
+
+plt.figure()
+plt.bar(models.keys(),model.values())
+plt.ylabel("Accuracy")
+plt.title("Model accuracy comparison")
+plt.ylim(0,1)
+plt.show()
