@@ -19,9 +19,9 @@ def euclidean_distance(x1, x2):
 
 def predict(X_train, y_train, x_test, k=3):
     distances = [euclidean_distance(x_test, x) for x in X_train]
-    k_indices = np.argsort(distances)[:k]
-    k_nearest = [y_train[i] for i in k_indices]
-    return Counter(k_nearest).most_common(1)[0][0]
+    k_indices = np.argsort(distances)[:k] #takes only 1st k items
+    k_nearest = [y_train[i] for i in k_indices] #labels fot the nearest ones
+    return Counter(k_nearest).most_common(1)[0][0] #common ones [][] return the label
 
 # Testing
 predictions = [predict(X_train, y_train, x, k=3) for x in X_test]
