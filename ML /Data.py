@@ -50,3 +50,5 @@ df.sort_values("c2")# data is sorted acc to c2
 df["c2"][`df["c2"]==0]="male"# change values in a col male whereever it is 0
 df["c1"] # or df.pop("c1")
 df[["c1","c2"]]
+df.iloc[0:6,0:5]
+df.loc[0:6,"c1":"c4"]
