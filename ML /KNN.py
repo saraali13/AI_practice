@@ -36,3 +36,22 @@ for i in range(1,11):
   acc_=accuracy_score(y_test,pred_y)
   acc.append(acc_)
 
+TP=cn_mat[1,1]# true positive
+TN=cn_mat[0,0]# true negative
+FP=cn_mat[0,1]# false positive
+FN=cn_mat[1,0]# false negative
+
+precision= TP/(TP+FP)
+recall=TP/(TP+FN)
+training_accuracy=knn.score(x_train,y_train)
+testing_accuracy=knn.score(x_test,y_test)
+
+print("Accuracy: ",acc)
+print("Classification Report: ",cl_rep)
+print("Confusion Matrix: ",cn_mat)
+
+print(f"True Positive: {TP}\nTrue Negative: {TN}\nFalse Positive: {FP}\nFalse Negative: {FN}")
+print("Precision: ",precision)
+print("Recall: ",recall)
+print("Training Accuracy: ",training_accuracy)
+print("Testing Accuracy: ",testing_accuracy)
