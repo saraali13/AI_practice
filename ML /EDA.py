@@ -46,7 +46,7 @@ plt.show()
 # -------------------------
 # 4. Target Class Distribution,Histograms
 # -------------------------
-sns.countplot(data=df, x='Diagnosis')
+sns.countplot(data=df, x='Diagnosis') 
 plt.title("Distribution of Diagnosis (0 = Benign, 1 = Malignant)")
 plt.show()
 print(df["Diagnosis"].value_counts(normalize=True))
@@ -69,3 +69,6 @@ plt.figure(figsize=(12, 6))
 sns.boxplot(data=df, x='Diagnosis', y='feature_0')  # Example for one feature
 plt.title("Boxplot of Feature_0 by Diagnosis")
 plt.show()
+
+
+skewness=df[num_col].skew()
