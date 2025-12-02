@@ -1,6 +1,7 @@
 import re
 import nltk
 #from nltk.corpus import stopwords
+from nltk.Wordcount import CountVectorizer
 from nltk.stem import PorterStemmer,WordNetLemmatizer
 #from nltk.tokenize import word_tokenize, sent_tokenize
 
@@ -46,3 +47,8 @@ stop_words=set(stopwords.words("english"))
 
 fil_words=[word for word in word_tk if word.lower() not in stop_words]
 print(f"Original words: {word_tk}\nAfter removing stop words: {fil_words}")
+
+
+vectorizer = CountVectorizer(stop_words="english")
+X_train_vec = vectorizer.fit_transform(X_train)
+X_test_vec = vectorizer.transform(X_test)
